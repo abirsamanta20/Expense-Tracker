@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Welcome to Expense Tracker, Your Smart Companion</title>
+    <base href="/" />
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <meta name="theme-color" content="#f9c10a" />
+    <meta name="description" content="vac For SA" />
+    <meta name="keywords" content="vac, Customer, AI, NLP, Computer Vision, USA, India, brainware" />
+    <meta name="author" content="brainware" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="application-name" content="brainware vac" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+    <meta name="apple-mobile-web-app-title" content="brainware vac" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800;900&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="icon" type="image/x-icon" href="favicon.ico" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" rel="stylesheet" />
+    <link rel="manifest" href="manifest.webmanifest" />
+  </head>
+  <body>
+    <app-root></app-root>
+    <script>
+      // Prevent messages starting with [HMR] or [WDS] from being printed to the console
+      (function (global) {
+        const console_log = global.console.log;
+        global.console.log = function () {
+          if (!(arguments.length === 1 && typeof arguments[0] === 'string' && arguments[0].match(/^\[(HMR|WDS)\]/))) {
+            console_log.apply(global.console, arguments);
+          }
+        };
+      })(window);
+    </script>
+    <noscript>Please enable JavaScript to continue using this application.</noscript>
+  </body>
+</html>

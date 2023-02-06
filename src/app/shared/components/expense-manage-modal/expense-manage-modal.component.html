@@ -1,0 +1,175 @@
+<div
+  class="modal fade side-sheet-modal-sm animate__animated animate__slideInRight"
+  bsModal
+  #expenseManageModal="bs-modal"
+  [config]="{ backdrop: true, ignoreBackdropClick: true }"
+>
+  <div class="modal-dialog position-fixed right-0 m-0 shadow-lg" style="max-width: max-content">
+    <div class="modal-content vh-100 rounded-0 border-0 overflow-auto px-5 py-3">
+      <div class="modal-header border-0 px-4 d-flex justify-content-between">
+        <h4 class="my-auto font-weight-heavy">{{ config.isEdit ? 'Edit' : 'New' }} Transaction</h4>
+        <button
+          type="button"
+          class="close btn pull-right btn-white border-0 shadow-none my-auto p-0"
+          (click)="closeModal()"
+        >
+          <span class="text--size-25 font-weight-bolder text-secondary">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body px-4 pt-0">
+        <section>
+          <div class="mb-3">
+            <label class="form-label">Category</label>
+            <div class="btn-group d-block" dropdown>
+              <button
+                dropdownToggle
+                type="button"
+                [ngClass]="transactionDetails.selectedCategory.id ? 'btn-dark' : 'btn-outline-dark '"
+                class="btn shadow-none font-weight-bold dropdown-toggle"
+              >
+                {{
+                  transactionDetails.selectedCategory.id
+                    ? transactionDetails.selectedCategory.name
+                    : 'Select From List '
+                }}
+                <span class="caret"></span>
+              </button>
+              <ul *dropdownMenu class="dropdown-menu shadow border-0 overflow-auto" style="max-height: 200px">
+                <ng-container *ngFor="let category of categoryList; let i = index">
+                  <li class="cursor-pointer" (click)="transactionDetails.selectedCategory = category">
+                    <a class="dropdown-item font-weight-bold">{{ category.name }}</a>
+                  </li>
+                </ng-container>
+              </ul>
+            </div>
+            <small class="d-block text-danger font-weight-bolder" *ngIf="validation.selectedCategory"
+              >Not a valid category</small
+            >
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Amount</label>
+            <input type="number" class="form-control" [(ngModel)]="transactionDetails.amount" />
+            <small class="text-danger font-weight-bold d-block" *ngIf="validation.amount">No a valid amount</small>
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label">Select Date</label>
+            <div class="d-block">
+              <input
+                type="text"
+                [readOnly]="true"
+                [(ngModel)]="transactionDetails.date"
+                [bsConfig]="{ dateInputFormat: 'DD-MM-YYYY' }"
+                placeholder="Datepicker"
+                class="form-control"
+                bsDatepicker
+              />
+            </div>
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label">Description</label>
+            <textarea class="form-control" [(ngModel)]="transactionDetails.description" rows="2"></textarea>
+            <small class="text-danger font-weight-bold d-block" *ngIf="validation.description"
+              >No a valid description</small
+            >
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label d-block">Upload File(s)</label>
+            <label
+              class="
+                btn
+                text-center
+                btn-file-upload
+                shadow-none
+                rounded
+                my-auto
+                cursor-pointer
+                font-weight-bold
+                btn-dark
+              "
+            >
+              <input
+                type="file"
+                (change)="handleFileInput($event)"
+                [multiple]="true"
+                accept="image/jpeg,.pdf"
+                class="overflow-hidden border-0 position-absolute p-0"
+              />
+              <ng-container> <i class="far fa-folder-open me-2"></i>Browse File </ng-container>
+            </label>
+          </div>
+
+          <!--existing files(s)-->
+          <ul class="list-group list-group-flush" *ngIf="transactionDetails.attachment.length">
+            <li
+              *ngFor="let item of transactionDetails.attachment"
+              class="list-group-item d-inline-flex justify-content-between"
+            >
+              <div class="d-flex justify-content-start my-auto">
+                <img
+                  [src]="item['fileUrl']"
+                  *ngIf="item['fileUrl'] && item.type === 'image/jpeg'"
+                  alt="image"
+                  [width]="35"
+                  class="my-auto me-2"
+                />
+                <i
+                  class="fa-solid fa-file-pdf my-auto me-2 text-danger text--size-25"
+                  *ngIf="item['fileUrl'] && item.type === 'application/pdf'"
+                ></i>
+                <small class="text-truncate my-auto" style="max-width: 200px">
+                  <span class="font-weight-bolder">{{ item.name }}</span>
+                  <b class="d-block">{{ item._size }}</b>
+                </small>
+              </div>
+              <i class="fas fa-trash-alt text-danger-dark my-auto cursor-pointer"></i>
+            </li>
+          </ul>
+
+          <hr
+            class="border border-light"
+            *ngIf="transactionDetails.files.length && transactionDetails.attachment.length"
+          />
+
+          <!--currently uploading-->
+          <ng-container *ngIf="transactionDetails.files.length">
+            <h6 class="font-weight-heavy text-danger-dark">
+              {{ transactionDetails.files.length }} files to be uploaded:
+            </h6>
+            <ul class="list-group list-group-flush">
+              <li
+                *ngFor="let item of transactionDetails.files"
+                class="list-group-item d-inline-flex justify-content-between"
+              >
+                <div class="d-flex justify-content-start my-auto">
+                  <img
+                    [src]="item['fileUrl']"
+                    *ngIf="item['fileUrl'] && item.type === 'image/jpeg'"
+                    alt="image"
+                    [width]="35"
+                    class="my-auto me-2"
+                  />
+                  <i
+                    class="fa-solid fa-file-pdf my-auto me-2 text-danger text--size-25"
+                    *ngIf="item['fileUrl'] && item.type === 'application/pdf'"
+                  ></i>
+                  <small class="text-truncate my-auto" style="max-width: 200px">
+                    <span class="font-weight-bolder">{{ item.name }}</span>
+                    <b class="d-block">{{ item._size }}</b>
+                  </small>
+                </div>
+                <i class="fas fa-trash-alt text-danger-dark my-auto cursor-pointer"></i>
+              </li>
+            </ul>
+          </ng-container>
+
+          <button type="button" class="btn btn-warning mt-4 w-100 font-weight-bold" (click)="prepareTransaction()">
+            Save Changes
+          </button>
+        </section>
+      </div>
+    </div>
+  </div>
+</div>

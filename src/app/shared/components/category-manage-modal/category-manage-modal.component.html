@@ -1,0 +1,68 @@
+<div
+  class="modal fade side-sheet-modal-xs animate__animated animate__slideInRight"
+  bsModal
+  #categoryManageModal="bs-modal"
+  [config]="{ backdrop: true, ignoreBackdropClick: true }"
+>
+  <div class="modal-dialog position-fixed right-0 m-0 shadow-lg" style="max-width: max-content">
+    <div class="modal-content vh-100 rounded-0 border-0 overflow-auto">
+      <div class="modal-header border-0 px-4 d-flex justify-content-between">
+        <h4 class="my-auto font-weight-heavy">{{ config.isEdit ? 'Edit' : 'New' }} Category</h4>
+        <button
+          type="button"
+          class="close btn pull-right btn-white border-0 shadow-none my-auto p-0"
+          (click)="closeModal()"
+        >
+          <span class="text--size-25 font-weight-bolder text-secondary">&times;</span>
+        </button>
+      </div>
+
+      <div class="modal-body px-4 pt-0">
+        <section>
+          <div class="mb-3">
+            <label class="form-label">Category Type</label>
+            <div class="btn-group d-block" dropdown>
+              <button
+                dropdownToggle
+                type="button"
+                class="btn shadow-none btn-outline-dark font-weight-bold dropdown-toggle btn-sm"
+                aria-controls="dropdown-basic"
+              >
+                {{ categoryDetails.type || 'Select From List' }} <span class="caret"></span>
+              </button>
+              <ul *dropdownMenu class="dropdown-menu shadow border-0">
+                <li class="cursor-pointer" (click)="categoryDetails.type = 'CREDIT'">
+                  <a class="dropdown-item font-weight-bold">CREDIT</a>
+                </li>
+                <li class="cursor-pointer" (click)="categoryDetails.type = 'DEBIT'">
+                  <a class="dropdown-item font-weight-bold">DEBIT</a>
+                </li>
+              </ul>
+            </div>
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Name</label>
+            <input [(ngModel)]="categoryDetails.name" type="text" class="form-control" />
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label">Description</label>
+            <textarea [(ngModel)]="categoryDetails.description" class="form-control" rows="2"></textarea>
+          </div>
+
+          <div class="mt-4 mb-3 ps-0 form-check">
+            <span class="switch switch-success switch-xs">
+              <label></label>
+              <input [id]="'status-category'" type="checkbox" class="switch" [(ngModel)]="categoryDetails.status" />
+              <label [htmlFor]="'status-category'" class="text--size-15 font-weight-bold">Status</label>
+            </span>
+          </div>
+
+          <button (click)="manageCategory()" type="button" class="btn btn-warning mt-4 w-100 font-weight-bold">
+            Save Changes
+          </button>
+        </section>
+      </div>
+    </div>
+  </div>
+</div>
